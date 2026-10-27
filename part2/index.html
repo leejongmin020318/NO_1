@@ -97,8 +97,8 @@ if(!isConfigured()){
 }else{
  try{
   firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.database();
-  auth.signInAnonymously().then(cred=>{myUid=cred.user.uid;setStatus('공용 투표에 연결됐어요. 한 사람당 최대 3곳까지 선택할 수 있습니다.');return db.ref('part2Votes').on('value',snap=>{latestVotes=snap.val()||{};draw(latestVotes,myUid)})})
-  .catch(e=>setStatus('Firebase 인증 오류: '+e.message));
+  auth.signInAnonymously().then(cred=>{myUid=cred.user.uid;draw({},myUid);document.getElementById('total').textContent='총 0표';setStatus('로그인 완료. 투표 결과를 불러오는 중입니다…');db.ref('part2Votes').on('value',snap=>{latestVotes=snap.val()||{};draw(latestVotes,myUid);setStatus('공용 투표에 연결됐어요. 한 사람당 최대 3곳까지 선택할 수 있습니다.')},e=>{document.getElementById('total').textContent='연결 오류';setStatus('2파트 투표 데이터 읽기 권한이 없습니다. Firebase Realtime Database 규칙에 part2Votes 경로를 추가한 뒤 새로고침해 주세요. 상세 오류: '+e.message)})})
+  .catch(e=>{document.getElementById('total').textContent='연결 오류';setStatus('Firebase 인증 오류: '+e.message)});
  }catch(e){setStatus('Firebase 설정 오류: '+e.message);draw({},null)}
 }
 </script>
