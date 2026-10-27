@@ -52,14 +52,14 @@ Firebase Web 앱에서 받은 실제 `apiKey`, `authDomain`, `databaseURL`, `pro
 
 ## 현재 알려진 후보 정보
 
-- 꼭이집 신부동점 — https://naver.me/I5wVGyDS
-- 할매솥뚜껑삼겹살 천안신부점 — https://naver.me/574ixX13
-- 링크 3 — https://naver.me/xLNtUEJE
-- 한판승 — https://naver.me/IDkmHksf
-- 링크 5 — https://naver.me/xE6OJeoX
-- 지인 추천 — https://naver.me/FA2xwIeo
-- 링크 7 — https://naver.me/FgHIUYiY (링크 3과 같은 플레이스 ID로 연결됨)
-- 링크 8 — https://naver.me/F6lvM6xs
-- 자연농원 (지인 추천) — https://naver.me/Fuz5FEdT
+- 후보 1 — https://naver.me/I5wVGyDS
+- 후보 2 — https://naver.me/574ixX13
+- 후보 3 — https://naver.me/xLNtUEJE
+- 후보 4 — https://naver.me/IDkmHksf
+- 후보 5 — https://naver.me/xE6OJeoX
+- 후보 6 (지인 추천) — https://naver.me/FA2xwIeo
+- 후보 7 — https://naver.me/FgHIUYiY
+- 후보 8 — https://naver.me/F6lvM6xs
+- 후보 9 (지인 추천) — https://naver.me/Fuz5FEdT
 
-네이버 지도 단축 링크 중 일부는 자동 확인 도구에서 실제 상호를 표시하지 않았습니다. 정확하지 않은 이름이나 도보 시간을 추측해 넣지 않았습니다. 사진은 음식점 자체 사진이 아니라 둘러보기용 참고 이미지이며, 각 카드의 네이버 지도 버튼으로 실제 사진·메뉴를 확인할 수 있습니다.
+네이버 단축 링크는 이 환경에서 실제 상호와 도보 시간을 자동 확인할 수 없었습니다. 이름과 위치는 네이버 지도에서 확인 후 정확히 반영해 주세요. 사진은 음식점 자체 사진이 아니라 둘러보기용 참고 이미지이며, 각 카드의 네이버 지도 버튼으로 실제 사진·메뉴를 확인할 수 있습니다.
