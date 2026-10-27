@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2파트 회식 장소 투표</title>
+<style>
+:root{--ink:#192335;--muted:#6c7789;--line:#e7ebf2;--blue:#315efb;--bg:#f5f7fb;--green:#16835e}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+.hero{padding:38px 18px 30px;background:linear-gradient(135deg,#14254c,#315efb);color:white}.wrap{max-width:1080px;margin:auto}.eyebrow{font-size:12px;letter-spacing:.14em;opacity:.8;font-weight:800}h1{font-size:clamp(29px,5vw,44px);margin:12px 0 8px}.hero p{margin:0;line-height:1.7;opacity:.9}.main{padding:24px 16px 60px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}.toolbar p{margin:0;font-size:14px;color:var(--muted)}.pill{background:#e8edff;color:#244bd5;border-radius:99px;padding:9px 12px;font-weight:800;font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,310px),1fr));gap:16px}.card{background:white;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 6px 24px #182b4a08;display:flex;flex-direction:column}
+.gallery{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;background:#e8edf5;scrollbar-width:thin;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}.gallery img{height:210px;width:100%;min-width:100%;object-fit:cover;scroll-snap-align:start;display:block;background:#e8edf5}.content{padding:17px;display:flex;flex-direction:column;gap:10px;flex:1}.titleRow{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.name{font-size:19px;line-height:1.35;font-weight:850;overflow-wrap:anywhere}.tag{font-size:11px;font-weight:800;white-space:nowrap;background:#fff1d6;color:#925500;padding:5px 8px;border-radius:99px}.location{font-size:13px;line-height:1.55;color:var(--muted)}.desc{font-size:13px;line-height:1.65;color:#485468}.actions{display:flex;gap:8px;margin-top:auto;padding-top:4px}.btn{min-height:46px;display:flex;align-items:center;justify-content:center;border:0;border-radius:12px;padding:12px 10px;font-size:14px;font-weight:800;text-decoration:none;text-align:center;cursor:pointer;flex:1;touch-action:manipulation}.map{background:#eef2f8;color:#26334a}.vote{background:var(--blue);color:white}.vote.selected{background:var(--green)}.results{font-size:12px;color:var(--muted);display:flex;justify-content:space-between}.bar{height:6px;border-radius:99px;background:#edf0f5;overflow:hidden}.bar span{display:block;height:100%;background:var(--blue);width:0;transition:width .2s}.message{padding:15px 16px;border:1px solid var(--line);border-radius:14px;background:white;color:var(--muted);font-size:13px;line-height:1.7;margin-top:20px}.status{font-size:13px;margin:0 0 16px;color:var(--muted);line-height:1.6}footer{text-align:center;padding:20px;color:#8993a4;font-size:12px}
+@media(max-width:600px){.hero{padding:28px 18px 24px}.hero p{font-size:14px}.main{padding:16px 12px calc(36px + env(safe-area-inset-bottom))}.toolbar{margin-bottom:12px;align-items:flex-start}.toolbar p{font-size:13px;line-height:1.5;max-width:70%}.grid{grid-template-columns:minmax(0,1fr);gap:14px}.card{border-radius:16px}.gallery img{height:220px;min-width:100%;width:100%}.content{padding:15px;gap:11px}.name{font-size:18px}.desc{font-size:14px}.location{font-size:13px}.actions{flex-direction:row;gap:8px}.btn{min-height:48px;font-size:13px;padding:12px 8px}.message{margin-top:16px}.status{margin-bottom:12px}}
+@media(max-width:360px){.gallery img{height:190px}.actions{flex-direction:column}.btn{width:100%}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="wrap"><div class="eyebrow">TEAM 2 · DINNER VOTE</div><h1>2파트 회식 장소 투표</h1><p>식당 이름이 표시된 카드를 확인하고, 마음에 드는 식당에 한 표를 주세요.<br>‘네이버 지도 보기’를 누르면 식당의 실제 사진·메뉴·위치를 확인할 수 있어요.</p></div></header>
+<main class="main wrap">
+<div class="toolbar"><p>한 사람당 최대 3곳 선택 · 선택한 곳을 다시 누르면 취소됩니다.</p><span class="pill" id="total">불러오는 중…</span></div>
+<p class="status" id="status">공용 투표 데이터에 연결하는 중입니다.</p>
+<section class="grid" id="cards"></section>
+<div class="message"><strong>안내</strong><br>이 페이지는 여러 사람이 같은 링크로 접속해 투표 결과를 공유하도록 Firebase를 사용합니다. 아래 README의 Firebase 설정을 완료해야 투표가 실제로 저장됩니다. 식당 정보는 제공된 링크와 공개된 매장 소개를 바탕으로 순차적으로 보완 중입니다. 각 식당 카드는 이름이 크게 표시된 이미지로 통일했습니다. 실제 매장 사진과 메뉴는 네이버 플레이스에서 확인해 주세요.</div>
+</main><footer>모두의 한 표로 회식 장소를 정해요 🍽️</footer>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* SETUP: replace the placeholder values with your Firebase Web App config. */
+const firebaseConfig = {
+  apiKey: "AIzaSyC9_Bf086sAhMtkBFnG9o3swC1pETAu5T0",
+  authDomain: "dinner-nignt.firebaseapp.com",
+  databaseURL: "https://dinner-nignt-default-rtdb.firebaseio.com",
+  projectId: "dinner-nignt",
+  appId: "1:881215382300:web:ccda291551f74ff6e8d0d9"
+};
+const places = [
+ {id:1,name:"꼭이집 (신부동점)",url:"https://naver.me/I5wVGyDS",area:"충남 천안시 동남구 먹거리2길 1 · 신부동 먹자골목",detail:"돼지고기구이 전문점. 대표 메뉴는 삼겹살과 안심을 함께 즐기는 ‘꼭이한판’이며, 고기를 구워서 제공하는 방식으로 소개돼 있어요. 돌미나리와 여러 소스를 곁들여 먹는 메뉴가 특징입니다.",tag:"",photos:["photo-1558030006-450675393462","photo-1529193591184-b1d58069ecdd"]},
+ {id:2,name:"할매솥뚜껑삼겹살 천안신부점",url:"https://naver.me/574ixX13",area:"충남 천안시 동남구 먹거리9길 7 1층 · 신부동",detail:"솥뚜껑에 구워 먹는 숙성 흑돼지 전문점. 대표 메뉴는 흑돼지숙성 삼겹살한판(600g)이며, 숙성 삼겹살과 목살도 선택할 수 있어요. 단체석이 있고 고기를 직접 구워주는 곳으로 소개됩니다.",tag:"",photos:["photo-1529193591184-b1d58069ecdd","photo-1604908176997-125f25cc6f3d"]},
+ {id:3,name:"황홀한막창&뒷고기 신부동 본점",url:"https://naver.me/xLNtUEJE",area:"충남 천안시 동남구 터미널3길 17, 1층 · 신부동",detail:"막창과 돼지고기 특수부위 구이를 즐길 수 있는 고깃집. 대표 메뉴는 과일 숙성 돼지막창·소막창과 뒷고기 모둠(뒷덜미살·왕뽈살·두항정살)이며, 닭목살구이와 직화불막창도 있어요. 단체 모임과 회식 장소로 소개됩니다.",tag:"",photos:["photo-1529193591184-b1d58069ecdd","photo-1604908176997-125f25cc6f3d"]},
+ {id:4,name:"한판승",url:"https://naver.me/IDkmHksf",area:"천안 신부동 · 정확한 주소는 네이버 플레이스에서 확인",detail:"상호명은 확인했지만, 현재 공개 검색 결과만으로는 해당 매장의 주소와 대표 메뉴를 확실하게 교차 확인하지 못했어요. 네이버 플레이스 링크에서 실제 위치와 메뉴를 확인할 수 있도록 연결해 두었습니다.",tag:"",photos:["photo-1544025162-d76694265947","photo-1558030006-450675393462"]},
+ {id:5,name:"명가곱창",url:"https://naver.me/xE6OJeoX",area:"천안 신부동 · 정확한 도로명 주소는 네이버 플레이스에서 확인",detail:"곱창 전문점으로, 공개된 천안 지역 매장 정보에는 곱창모둠(곱창·대창·막창·안창살), 한우곱창과 한우대창, 막창구이 등이 소개돼 있어요. 다만 같은 이름의 식당이 여러 지역에 있어 이 링크 매장의 주소와 메뉴는 네이버 플레이스에서 최종 확인해 주세요.",tag:"",photos:["photo-1517248135467-4c7edcad34c7","photo-1604908176997-125f25cc6f3d"]},
+ {id:6,name:"참돼짓간",url:"https://naver.me/FA2xwIeo",area:"천안 신부동 · 정확한 도로명 주소는 네이버 플레이스에서 확인",detail:"지인 추천 식당. 돼지고기 구이를 중심으로 회식 후보에 추가했어요. 대표 메뉴와 세부 위치는 네이버 플레이스에서 확인해 주세요.",tag:"지인 추천",photos:["photo-1558030006-450675393462","photo-1529193591184-b1d58069ecdd"]},
+ {id:7,name:"삼육가 신부점",url:"https://naver.me/F6lvM6xs",area:"천안 신부동 · 정확한 도로명 주소는 네이버 플레이스에서 확인",detail:"돼지고기 구이 전문점으로 회식 후보에 추가했어요. 대표 메뉴와 매장별 운영 정보는 네이버 플레이스에서 확인해 주세요.",tag:"",photos:["photo-1529193591184-b1d58069ecdd","photo-1558030006-450675393462"]},
+ {id:8,name:"자연농원",url:"https://naver.me/Fuz5FEdT",area:"천안 지역 · 정확한 도로명 주소는 네이버 플레이스에서 확인",detail:"지인 추천 식당으로 회식 후보에 추가했어요. 정확한 대표 메뉴와 매장 위치는 네이버 플레이스에서 확인해 주세요.",tag:"지인 추천",photos:["photo-1517248135467-4c7edcad34c4","photo-1414235077428-338989a2e8c0"]},
+];
+const imageUrl=src=>src.startsWith('http')?src:'https://images.unsplash.com/'+src+'?auto=format&fit=crop&w=900&q=80';
+function labelImage(name){
+ const safe=String(name).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17264d"/><stop offset="1" stop-color="#526ff0"/></linearGradient></defs><rect width="900" height="520" fill="url(#g)"/><circle cx="760" cy="90" r="180" fill="#ffffff" opacity=".08"/><circle cx="100" cy="470" r="220" fill="#ffffff" opacity=".07"/><text x="450" y="195" font-size="76" text-anchor="middle">🍽</text><text x="450" y="285" font-family="sans-serif" font-size="38" font-weight="700" fill="#fff" text-anchor="middle">'+safe+'</text><text x="450" y="335" font-family="sans-serif" font-size="23" fill="#e8edff" text-anchor="middle">메뉴 참고 이미지</text><text x="450" y="390" font-family="sans-serif" font-size="18" fill="#e8edff" text-anchor="middle">실제 사진은 네이버 플레이스에서 확인해 주세요</text></svg>';
+ return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+}
+const cards=document.getElementById('cards');
+function selectedIds(vote){
+ if(!vote)return [];
+ if(vote.placeIds && typeof vote.placeIds==='object')return Object.keys(vote.placeIds).filter(id=>vote.placeIds[id]===true).map(Number);
+ return vote.placeId ? [Number(vote.placeId)] : [];
+}
+function draw(votes={},uid=null){
+ const vals=Object.values(votes);
+ const total=vals.reduce((sum,v)=>sum+selectedIds(v).length,0);
+ const mineIds=uid?selectedIds(votes[uid]):[];
+ document.getElementById('total').textContent='총 '+total+'표';
+ cards.innerHTML=places.map(p=>{
+  const count=vals.filter(v=>selectedIds(v).includes(p.id)).length;
+  const mine=mineIds.includes(p.id);
+  const pct=total?Math.round(count/total*100):0;
+  return '<article class="card"><div class="gallery" aria-label="'+p.name+' 참고 이미지">'+'<img loading="lazy" decoding="async" src="'+labelImage(p.name)+'" alt="'+p.name+' 식당 이름 이미지">'+'</div><div class="content"><div class="titleRow"><div class="name">'+p.id+'. '+p.name+'</div>'+(p.tag?'<span class="tag">'+p.tag+'</span>':'')+'</div><div class="location">📍 '+p.area+'</div><div class="desc">'+p.detail+'</div><div class="results"><span>'+count+'표</span><span>'+pct+'%</span></div><div class="bar"><span style="width:'+pct+'%"></span></div><div class="actions"><a class="btn map" href="'+p.url+'" target="_blank" rel="noopener">네이버 지도 보기 ↗</a><button class="btn vote '+(mine?'selected':'')+'" onclick="castVote('+p.id+')">'+(mine?'✓ 선택 취소':'이곳에 투표')+'</button></div></div></article>';
+ }).join('');
+}
+let db=null, auth=null, myUid=null, latestVotes={};
+function setStatus(t){document.getElementById('status').textContent=t}
+function castVote(placeId){
+ if(!db||!myUid){setStatus('투표 서버에 연결되지 않았습니다. 잠시 후 새로고침해 주세요.');return}
+ const selected=selectedIds(latestVotes[myUid]);
+ const exists=selected.includes(placeId);
+ let next=exists?selected.filter(id=>id!==placeId):[...selected,placeId];
+ if(!exists && selected.length>=3){
+  setStatus('한 사람당 최대 3곳까지 투표할 수 있어요. 선택한 곳을 취소한 뒤 다른 곳을 골라 주세요.');
+  return;
+ }
+ if(next.length===0){
+  db.ref('part2Votes/'+myUid).remove()
+   .then(()=>setStatus('선택을 모두 취소했어요. 최대 3곳까지 다시 선택할 수 있습니다.'))
+   .catch(e=>setStatus('선택 변경에 실패했습니다: '+e.message));
+  return;
+ }
+ const placeIds={};
+ next.forEach(id=>placeIds[String(id)]=true);
+ db.ref('part2Votes/'+myUid).set({placeIds,updatedAt:Date.now()})
+  .then(()=>setStatus('현재 '+next.length+'/3곳을 선택했어요. 다른 사람의 투표 결과도 함께 반영됩니다.'))
+  .catch(e=>setStatus('투표 저장에 실패했습니다: '+e.message));
+}
+window.castVote=castVote;
+function isConfigured(){return firebaseConfig.apiKey!=='PASTE_FIREBASE_API_KEY'&&firebaseConfig.projectId!=='PASTE_PROJECT_ID'&&firebaseConfig.appId!=='PASTE_FIREBASE_APP_ID'}
+if(!isConfigured()){
+ draw({},null);setStatus('사이트 파일은 배포할 수 있지만, 공용 투표를 연결하려면 README에 안내된 Firebase 설정이 필요합니다.');
+}else{
+ try{
+  firebase.initializeApp(firebaseConfig);auth=firebase.auth();db=firebase.database();
+  auth.signInAnonymously().then(cred=>{myUid=cred.user.uid;setStatus('공용 투표에 연결됐어요. 한 사람당 최대 3곳까지 선택할 수 있습니다.');return db.ref('part2Votes').on('value',snap=>{latestVotes=snap.val()||{};draw(latestVotes,myUid)})})
+  .catch(e=>setStatus('Firebase 인증 오류: '+e.message));
+ }catch(e){setStatus('Firebase 설정 오류: '+e.message);draw({},null)}
+}
+</script>
+</body></html>
