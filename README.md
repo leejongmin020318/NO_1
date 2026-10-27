@@ -19,9 +19,24 @@
         ".write": "auth != null && auth.uid === $uid",
         ".validate": "newData.hasChildren(['placeIds', 'updatedAt'])",
         "placeIds": {
-          ".validate": "newData.numChildren() >= 1 && newData.numChildren() <= 3",
           "$placeId": {
-            ".validate": "$placeId.matches(/^[1-8]$/) && newData.val() === true"
+            ".validate": "$placeId.matches(/^[1-9][0-9]*$/) && newData.val() === true"
+          }
+        },
+        "updatedAt": {
+          ".validate": "newData.isNumber()"
+        },
+        "$other": { ".validate": false }
+      }
+    },
+    "part2Votes": {
+      ".read": "auth != null",
+      "$uid": {
+        ".write": "auth != null && auth.uid === $uid",
+        ".validate": "newData.hasChildren(['placeIds', 'updatedAt'])",
+        "placeIds": {
+          "$placeId": {
+            ".validate": "$placeId.matches(/^[1-9][0-9]*$/) && newData.val() === true"
           }
         },
         "updatedAt": {
@@ -33,6 +48,16 @@
   }
 }
 ```
+
+## 식당 후보를 9번, 10번 이후로 추가하는 방법
+
+식당 목록은 코드의 `places` 배열에서 관리합니다. 새 후보를 받으면 해당 파트의 파일에 기존 마지막 번호 다음으로 고유한 `id`, 식당명 `name`, 네이버 플레이스 `url`, 위치 `area`, 소개 `detail` 등을 추가하면 카드와 투표 집계에 자동 반영됩니다.
+
+- 3파트: `index.html`의 `places` 배열에 추가
+- 2파트: `part2/index.html`의 `places` 배열에 추가
+- 두 파트는 식당 목록을 별도로 관리하고, 투표 저장 경로도 각각 `votes`와 `part2Votes`로 분리됩니다.
+- 위 Firebase 규칙은 9번 이후의 양의 정수 ID도 허용합니다. 규칙을 변경한 뒤 **Publish**를 눌러야 적용됩니다.
+- 한 사람당 최대 3곳 선택 제한은 현재 페이지에서 적용됩니다. 이 규칙 예시는 Firebase 서버 측에서 최대 선택 수까지 강제하지는 않습니다.
 
 ## 2. 사이트에 Firebase 설정 넣기
 
