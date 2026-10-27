@@ -19,7 +19,7 @@
 <div class="toolbar"><p>한 사람당 한 곳 · 다시 선택하면 투표가 변경됩니다.</p><span class="pill" id="total">불러오는 중…</span></div>
 <p class="status" id="status">공용 투표 데이터에 연결하는 중입니다.</p>
 <section class="grid" id="cards"></section>
-<div class="message"><strong>안내</strong><br>이 페이지는 여러 사람이 같은 링크로 접속해 투표 결과를 공유하도록 Firebase를 사용합니다. 아래 README의 Firebase 설정을 완료해야 투표가 실제로 저장됩니다. 식당 정보는 제공된 링크와 공개된 매장 소개를 바탕으로 순차적으로 보완 중입니다. 사진은 확인 가능한 대표 메뉴 이미지가 포함될 수 있으며, 매장 내부·외관 사진은 네이버 플레이스에서 확인해 주세요.</div>
+<div class="message"><strong>안내</strong><br>이 페이지는 여러 사람이 같은 링크로 접속해 투표 결과를 공유하도록 Firebase를 사용합니다. 아래 README의 Firebase 설정을 완료해야 투표가 실제로 저장됩니다. 식당 정보는 제공된 링크와 공개된 매장 소개를 바탕으로 순차적으로 보완 중입니다. 사진은 메뉴 분위기를 보여주는 참고용 이미지입니다. 이미지가 표시되지 않는 경우 식당 이름이 들어간 안내 이미지로 자동 대체됩니다. 실제 매장 사진과 메뉴는 네이버 플레이스에서 확인해 주세요.</div>
 </main><footer>모두의 한 표로 회식 장소를 정해요 🍽️</footer>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
@@ -34,7 +34,7 @@ const firebaseConfig = {
   appId: "PASTE_FIREBASE_APP_ID"
 };
 const places = [
- {id:1,name:"꼭이집 (신부동점)",url:"https://naver.me/I5wVGyDS",area:"충남 천안시 동남구 먹거리2길 1 · 신부동 먹자골목",detail:"돼지고기구이 전문점. 대표 메뉴는 삼겹살과 안심을 함께 즐기는 ‘꼭이한판’이며, 고기를 구워서 제공하는 방식으로 소개돼 있어요. 돌미나리와 여러 소스를 곁들여 먹는 메뉴가 특징입니다.",tag:"",photos:["https://img.kr.gcp-karroter.net/daangn-business/bizPlatform/profile/center_biz_5250214/1771600662712/RklMRV9LSVRfMTE5ODU1Mjc3MDM2MzUxNDY%3D.jpeg?q=95&s=1440x1440&t=inside","photo-1558030006-450675393462"]},
+ {id:1,name:"꼭이집 (신부동점)",url:"https://naver.me/I5wVGyDS",area:"충남 천안시 동남구 먹거리2길 1 · 신부동 먹자골목",detail:"돼지고기구이 전문점. 대표 메뉴는 삼겹살과 안심을 함께 즐기는 ‘꼭이한판’이며, 고기를 구워서 제공하는 방식으로 소개돼 있어요. 돌미나리와 여러 소스를 곁들여 먹는 메뉴가 특징입니다.",tag:"",photos:["photo-1558030006-450675393462","photo-1529193591184-b1d58069ecdd"]},
  {id:2,name:"할매솥뚜껑삼겹살 천안신부점",url:"https://naver.me/574ixX13",area:"충남 천안시 동남구 먹거리9길 7 1층 · 신부동",detail:"솥뚜껑에 구워 먹는 숙성 흑돼지 전문점. 대표 메뉴는 흑돼지숙성 삼겹살한판(600g)이며, 숙성 삼겹살과 목살도 선택할 수 있어요. 단체석이 있고 고기를 직접 구워주는 곳으로 소개됩니다.",tag:"",photos:["photo-1529193591184-b1d58069ecdd","photo-1604908176997-125f25cc6f3d"]},
  {id:3,name:"황홀한막창&뒷고기 신부동 본점",url:"https://naver.me/xLNtUEJE",area:"충남 천안시 동남구 터미널3길 17, 1층 · 신부동",detail:"막창과 돼지고기 특수부위 구이를 즐길 수 있는 고깃집. 대표 메뉴는 과일 숙성 돼지막창·소막창과 뒷고기 모둠(뒷덜미살·왕뽈살·두항정살)이며, 닭목살구이와 직화불막창도 있어요. 단체 모임과 회식 장소로 소개됩니다.",tag:"",photos:["photo-1529193591184-b1d58069ecdd","photo-1604908176997-125f25cc6f3d"]},
  {id:4,name:"한판승",url:"https://naver.me/IDkmHksf",area:"천안 신부동 · 정확한 주소는 네이버 플레이스에서 확인",detail:"상호명은 확인했지만, 현재 공개 검색 결과만으로는 해당 매장의 주소와 대표 메뉴를 확실하게 교차 확인하지 못했어요. 네이버 플레이스 링크에서 실제 위치와 메뉴를 확인할 수 있도록 연결해 두었습니다.",tag:"",photos:["photo-1544025162-d76694265947","photo-1558030006-450675393462"]},
@@ -44,7 +44,11 @@ const places = [
  {id:8,name:"자연농원",url:"https://naver.me/Fuz5FEdT",area:"천안 지역 · 정확한 도로명 주소는 네이버 플레이스에서 확인",detail:"지인 추천 식당으로 회식 후보에 추가했어요. 정확한 대표 메뉴와 매장 위치는 네이버 플레이스에서 확인해 주세요.",tag:"지인 추천",photos:["photo-1517248135467-4c7edcad34c4","photo-1414235077428-338989a2e8c0"]},
 ];
 const imageUrl=src=>src.startsWith('http')?src:'https://images.unsplash.com/'+src+'?auto=format&fit=crop&w=900&q=80';
-const fallbackImage='https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=900&q=80';
+function labelImage(name){
+ const safe=String(name).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+ const svg='<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17264d"/><stop offset="1" stop-color="#526ff0"/></linearGradient></defs><rect width="900" height="520" fill="url(#g)"/><circle cx="760" cy="90" r="180" fill="#ffffff" opacity=".08"/><circle cx="100" cy="470" r="220" fill="#ffffff" opacity=".07"/><text x="450" y="195" font-size="76" text-anchor="middle">🍽</text><text x="450" y="285" font-family="sans-serif" font-size="38" font-weight="700" fill="#fff" text-anchor="middle">'+safe+'</text><text x="450" y="335" font-family="sans-serif" font-size="23" fill="#e8edff" text-anchor="middle">메뉴 참고 이미지</text><text x="450" y="390" font-family="sans-serif" font-size="18" fill="#e8edff" text-anchor="middle">실제 사진은 네이버 플레이스에서 확인해 주세요</text></svg>';
+ return 'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(svg);
+}
 const cards=document.getElementById('cards');
 function draw(votes={},uid=null){
  const vals=Object.values(votes);const total=vals.length;
@@ -53,7 +57,7 @@ function draw(votes={},uid=null){
   const count=vals.filter(v=>Number(v.placeId)===p.id).length;
   const mine=uid && votes[uid] && Number(votes[uid].placeId)===p.id;
   const pct=total?Math.round(count/total*100):0;
-  return '<article class="card"><div class="gallery" aria-label="'+p.name+' 참고 이미지">'+p.photos.map(ph=>'<img loading="lazy" decoding="async" src="'+imageUrl(ph)+'" onerror="this.onerror=null;this.src=fallbackImage" alt="'+p.name+' 메뉴 참고 이미지">').join('')+'</div><div class="content"><div class="titleRow"><div class="name">'+p.id+'. '+p.name+'</div>'+(p.tag?'<span class="tag">'+p.tag+'</span>':'')+'</div><div class="location">📍 '+p.area+'</div><div class="desc">'+p.detail+'</div><div class="results"><span>'+count+'표</span><span>'+pct+'%</span></div><div class="bar"><span style="width:'+pct+'%"></span></div><div class="actions"><a class="btn map" href="'+p.url+'" target="_blank" rel="noopener">네이버 지도 보기 ↗</a><button class="btn vote '+(mine?'selected':'')+'" onclick="castVote('+p.id+')">'+(mine?'✓ 내 선택':'이곳에 투표')+'</button></div></div></article>';
+  return '<article class="card"><div class="gallery" aria-label="'+p.name+' 참고 이미지">'+p.photos.map(ph=>'<img loading="lazy" decoding="async" src="'+imageUrl(ph)+'" data-label="'+p.name.replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'" onerror="this.onerror=null;this.src=labelImage(this.dataset.label)" alt="'+p.name+' 메뉴 참고 이미지">').join('')+'</div><div class="content"><div class="titleRow"><div class="name">'+p.id+'. '+p.name+'</div>'+(p.tag?'<span class="tag">'+p.tag+'</span>':'')+'</div><div class="location">📍 '+p.area+'</div><div class="desc">'+p.detail+'</div><div class="results"><span>'+count+'표</span><span>'+pct+'%</span></div><div class="bar"><span style="width:'+pct+'%"></span></div><div class="actions"><a class="btn map" href="'+p.url+'" target="_blank" rel="noopener">네이버 지도 보기 ↗</a><button class="btn vote '+(mine?'selected':'')+'" onclick="castVote('+p.id+')">'+(mine?'✓ 내 선택':'이곳에 투표')+'</button></div></div></article>';
  }).join('');
 }
 let db=null, auth=null, myUid=null, latestVotes={};
