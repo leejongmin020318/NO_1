@@ -1,6 +1,6 @@
 # 인턴 회식 장소 투표
 
-이 저장소의 GitHub Pages로 공개 사이트를 배포할 수 있습니다. **여러 사람의 투표 결과를 공유하려면 Firebase 설정이 필수**입니다.
+이 저장소의 GitHub Pages로 공개 사이트를 배포할 수 있습니다. **여러 사람의 투표 결과를 공유하려면 Firebase 설정이 필수**입니다. 한 사람은 서로 다른 식당을 최대 3곳까지 선택할 수 있습니다.
 
 ## 1. Firebase 공용 투표 설정 (무료 Spark 요금제로 시작 가능)
 
@@ -17,9 +17,16 @@
       ".read": "auth != null",
       "$uid": {
         ".write": "auth != null && auth.uid === $uid",
-        ".validate": "newData.hasChildren(['placeId', 'updatedAt'])",
-        "placeId": { ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 9" },
-        "updatedAt": { ".validate": "newData.isNumber()" },
+        ".validate": "newData.hasChildren(['placeIds', 'updatedAt'])",
+        "placeIds": {
+          ".validate": "newData.numChildren() >= 1 && newData.numChildren() <= 3",
+          "$placeId": {
+            ".validate": "$placeId.matches(/^[1-8]$/) && newData.val() === true"
+          }
+        },
+        "updatedAt": {
+          ".validate": "newData.isNumber()"
+        },
         "$other": { ".validate": false }
       }
     }
